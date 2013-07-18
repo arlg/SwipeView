@@ -122,6 +122,7 @@ var SwipeView = (function (window, document) {
 		page: 0,
 		pageIndex: 0,
 		customEvents: [],
+		isPaused : false,
 		
 		onFlip: function (fn) {
 			this.wrapper.addEventListener('swipeview-flip', fn, false);
@@ -131,6 +132,14 @@ var SwipeView = (function (window, document) {
 		onMoveOut: function (fn) {
 			this.wrapper.addEventListener('swipeview-moveout', fn, false);
 			this.customEvents.push(['moveout', fn]);
+		},
+
+		pause: function(){
+			this.isPaused = true;
+		},
+
+		resume: function(){
+			this.isPaused = false;
 		},
 
 		onMoveIn: function (fn) {
@@ -227,6 +236,9 @@ var SwipeView = (function (window, document) {
 		},
 		
 		next: function () {
+
+			if(this.isPaused === true) return;
+
 			if (!this.options.loop && this.x == this.maxX) return;
 			
 			this.directionX = -1;
@@ -235,6 +247,9 @@ var SwipeView = (function (window, document) {
 		},
 
 		prev: function () {
+
+			if(this.isPaused === true) return;
+
 			if (!this.options.loop && this.x === 0) return;
 
 			this.directionX = 1;
@@ -283,6 +298,8 @@ var SwipeView = (function (window, document) {
 
 		__start: function (e) {
 			//e.preventDefault();
+
+			if(this.isPaused === true) return;
 
 			if (this.initiated) return;
 			
